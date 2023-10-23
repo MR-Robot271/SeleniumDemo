@@ -97,12 +97,15 @@ public class ZKHCrawler {
             // 创建Matcher
             Matcher matcher = pattern.matcher(number);
 
-            // 获取订货编码
+            // 图片的基本地址
             String baseImgUrl="https://private.zkh.com/PRODUCT/BIG/BIG_";
             String endImgUrl = "_01.jpg?x-oss-process=style/WEBPCOM_style_350";
             String imgUrl;
+            // 获取订货编码
             if (matcher.find()) {
+                // 订货编码 唯一
                 String realNumber = matcher.group(1);
+                // 图片地址
                 imgUrl=baseImgUrl+realNumber+endImgUrl;
                 // System.out.println(imgUrl);
             }else{
