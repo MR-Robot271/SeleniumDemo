@@ -41,10 +41,18 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "产品名称='" + pName + '\'' +
-                ", 产品价格='" + pPrice + '\'' +
-                ", 图片地址='" + pImg + '\'' +
-                '}';
+        if (pPrice<0){
+            return "Product{" +
+                    "pName='" + pName + '\'' +
+                    ", pPrice=" + "暂时无法获取价格" +
+                    ", pImg='" + pImg + '\'' +
+                    '}';
+        }else {
+            return "Product{" +
+                    "pName='" + pName + '\'' +
+                    ", pPrice=" + pPrice +
+                    ", pImg='" + pImg + '\'' +
+                    '}';
+        }
     }
 }
