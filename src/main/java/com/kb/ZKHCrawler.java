@@ -2,7 +2,9 @@ package com.kb;
 
 import com.kb.pojo.Keyword;
 import com.kb.pojo.Product;
+import com.kb.pojo.ProductExcel;
 import com.kb.utils.CrawlerUtils;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -42,8 +44,13 @@ public class ZKHCrawler {
             e.printStackTrace();
         }
 
+        // 随机向下滑动页面
         CrawlerUtils.slidePage(webDriver);
 
+        // 输出日志信息
+        Logger log = Logger.getLogger(Logger.class);
+        String startInfo="正在爬取："+keyword;
+        log.info(startInfo);
 
         // 存储结果
         List<Product> products = new java.util.ArrayList<>();
@@ -56,18 +63,27 @@ public class ZKHCrawler {
             products.addAll(CrawlerUtils.getInfo(elementsInfinite));
         }
 
-        // 输出产品数量
-//        System.out.println(products.size());
-//        for (Product product1 : products) {
-//            System.out.println(product1);
-//        }
-
         // 用品牌 型号 过滤数据
         products=CrawlerUtils.filter(products,Keyword);
-//        System.out.println(products.size());
-//        for (Product product1 : products) {
-//            System.out.println(product1);
-//        }
+
+        // 输出日志
+        if (products.size()>0){
+            for (Product product:products){
+                log.info(product);
+            }
+        }else{
+            // 没有匹配的信息就生成一个Product来说明情况
+            String result=keyword+" ：没有匹配的信息";
+            log.info(result);
+            Product product = new Product(result, -1.0f, " ");
+            products.add(product);
+        }
+
+
+
+        // 用品牌 型号 过滤数据
+        //products=CrawlerUtils.filter(products,Keyword);
+
 
         // 关闭浏览器
         webDriver.quit();

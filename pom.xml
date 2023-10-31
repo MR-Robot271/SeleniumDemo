@@ -38,6 +38,15 @@
             <version>4.1.2</version>
         </dependency>
 
+        <!-- 操作excel文件 性能更好-->
+        <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
+        <!-- 生成日志-->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>

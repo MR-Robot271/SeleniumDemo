@@ -1,6 +1,9 @@
 package com.kb.utils;
 
+import com.alibaba.excel.EasyExcel;
 import com.kb.pojo.Keyword;
+import com.kb.pojo.Product;
+import com.kb.pojo.ProductExcel;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -12,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FileUtils {
@@ -138,6 +142,79 @@ public class FileUtils {
             keyword.setModelParameters(parameters1);
 
             keywords.add(keyword);
+        }
+    }
+
+
+//    private static void writeToExcel(ResultItems resultItems, List<ProductExcel> productExcelList, String path, String pathOfTemp) {
+//        List<Product> productList;
+//        // 爬虫有结果时 结果为List
+//        if(resultItems.get("productList") instanceof List){
+//            productList = resultItems.get("productList");
+//
+//            //  只取结果的前三个
+//            if (productList.size() <= 3) {
+//                for (Product product : productList) {
+//                    Date date = new Date();
+//                    // 创建excel内容的实体类
+//                    ProductExcel productExcel = new ProductExcel(date, date, product);
+//                    productExcelList.add(productExcel);
+//                }
+//            }else{
+//                for (Product product : productList.subList(0, 3)) {
+//                    Date date = new Date();
+//                    // 创建excel内容的实体类
+//                    ProductExcel productExcel = new ProductExcel(date, date, product);
+//                    productExcelList.add(productExcel);
+//                }
+//            }
+//            // 以追加写入的方式，写入excel文件
+//            FileUtils.excelAppend(productExcelList, path, pathOfTemp);
+//        }
+//        // 无结果时 结果为String 此时实例化一个新的ProductExcel
+//        else if (resultItems.get("productList") instanceof String){
+//            Float noResultPrice=-1.0f;
+//            ProductExcel productExcel = new ProductExcel(new Date(), new Date(), resultItems.get("productList"), noResultPrice, "");
+//            productExcelList.add(productExcel);
+//            // 以追加写入的方式，写入excel文件
+//            FileUtils.excelAppend(productExcelList, path, pathOfTemp);
+//        }
+//        // 以上情况都不是
+//        else{
+//            throw new RuntimeException("爬取的结果为空或者异常");
+//        }
+//    }
+
+    /**
+     * @Description: 使用EasyExcel以追加的方式写入excel文件
+     * @Param: [productExcelList, path, pathOfTemp]
+     * @return: void
+     * @Date: 2023/10/31
+     */
+    public static void excelAppend(List<ProductExcel> productExcelList, String path, String pathOfTemp) {
+        // 以追加的形式写入excel
+        File file = new File(path);
+        File tempFile = new File(pathOfTemp);
+        // 判断文件是否已存在
+        if (file.exists()){
+            // 如果已存在，按照原有格式，不需要表头，追加写入
+            EasyExcel.write(file, ProductExcel.class)
+                    .needHead(false)
+                    .withTemplate(file)
+                    .file(tempFile)
+                    .sheet()
+                    .doWrite(productExcelList);
+        }
+        // 如果不存在，会自动创建文件，第一次写入需要表头
+        else{
+            EasyExcel.write(path, ProductExcel.class)
+                    .sheet("爬虫结果")
+                    .doWrite(productExcelList);
+        }
+
+        if (tempFile.exists()){
+            file.delete();
+            tempFile.renameTo(file);
         }
     }
 
