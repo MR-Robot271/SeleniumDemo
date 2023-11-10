@@ -141,18 +141,18 @@ public class CrawlerUtils {
                 }
                 // 比较 分词数量 与 击中次数 的差距
                 // 以5为界分为两段
-                if (words.size()<=5){
-                    // 再分为1 3 5 三段
-                    if (words.size()==1){
-                        if (words.size()==count){
+                if (words.size() <= 5) {
+                    // 再分为2 3 5 三段
+                    if (words.size() <= 2) {
+                        if (count>=1) {
                             newProducts.add(product);
                         }
-                    }else if(words.size()<=3){
-                        if (count>=1){
+                    } else if (words.size() <= 3) {
+                        if (count >= 2) {
                             newProducts.add(product);
                         }
-                    }else{
-                        if (count>=2){
+                    } else {
+                        if (count >= 3) {
                             newProducts.add(product);
                         }
                     }
